@@ -4,24 +4,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.CrimeRec.model.Complaint;
-import project.CrimeRec.service.MyService;
+import project.CrimeRec.service.complaintService;
 
 import java.util.List;
 import java.util.Optional;
 
 @RestController
-public class ApiController {
+public class ComplaintAPIController {
 
-    private final MyService myService;
+    private final complaintService complaintService;
 
     @Autowired
-    public ApiController(MyService myService) {
-        this.myService = myService;
+    public ComplaintAPIController(complaintService complaintService) {
+        this.complaintService = complaintService;
     }
 
     @PostMapping("/complaints/add")
     public ResponseEntity<String> addComplaint(@RequestBody Complaint complaint) {
-        myService.addComplaint(complaint);
+        complaintService.addComplaint(complaint);
         return ResponseEntity.ok("Complaint added successfully");
     }
 
@@ -29,7 +29,7 @@ public class ApiController {
 
     @GetMapping("/complaints/getAll")
     public ResponseEntity<List<Complaint>> getComplaints() {
-        List<Complaint> complaints = myService.getAllComplaints();
+        List<Complaint> complaints = complaintService.getAllComplaints();
         System.out.println(complaints.size());
         return ResponseEntity.ok(complaints);
     }
@@ -51,11 +51,11 @@ public class ApiController {
             @RequestParam(value = "complaintCreator", required = false) String complaintCreator) {
 
         if (complaintid!=null){
-            myService.deleteComplaintById(complaintid);
+            complaintService.deleteComplaintById(complaintid);
         } else if (complaintReceiver!=null) {
-            myService.deleteComplaintByReceiver(complaintReceiver);
+            complaintService.deleteComplaintByReceiver(complaintReceiver);
         } else if (complaintCreator!=null) {
-            myService.deleteByComplaintCreator(complaintCreator);
+            complaintService.deleteByComplaintCreator(complaintCreator);
         } else {
             return  ResponseEntity.badRequest().body("Please specify which complaint or complaints to delete.");
         }
@@ -66,7 +66,7 @@ public class ApiController {
 
     @GetMapping("/complaints/getById/{complaintid}")
     public ResponseEntity<Complaint> getComplaint( @PathVariable Long complaintid) {
-        Complaint complaint = myService.getComplaintById(complaintid);
+        Complaint complaint = complaintService.getComplaintById(complaintid);
         return ResponseEntity.ok(complaint);
     }
 
@@ -79,7 +79,7 @@ public class ApiController {
             @RequestParam(name = "complaintCreator", required = false) Optional<String> optionalComplaintCreator,
             @RequestParam(name = "complaintText", required = false) Optional<String> optionalComplaintText
     ) {
-        Complaint existingComplaint = myService.getComplaintById(complaintid);
+        Complaint existingComplaint = complaintService.getComplaintById(complaintid);
         if (existingComplaint == null) {
             return ResponseEntity.notFound().build();
         }
@@ -103,7 +103,7 @@ public class ApiController {
             return createErrorResponse("No update information provided for complaint.");
         }
 
-        myService.updateComplaint(existingComplaint);
+        complaintService.updateComplaint(existingComplaint);
 
         return ResponseEntity.ok(existingComplaint);
 

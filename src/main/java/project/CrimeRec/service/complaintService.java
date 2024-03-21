@@ -9,12 +9,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class MyService {
+public class complaintService {
 
     private final ComplaintRepository complaintRepository;
     private int id;
 
-    public MyService(ComplaintRepository complaintRepository) {
+    public complaintService(ComplaintRepository complaintRepository) {
         this.complaintRepository = complaintRepository;
 
 
