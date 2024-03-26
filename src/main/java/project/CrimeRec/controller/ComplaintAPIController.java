@@ -3,6 +3,7 @@ package project.CrimeRec.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import project.CrimeRec.exception.CustomException;
 import project.CrimeRec.model.Complaint;
 import project.CrimeRec.service.complaintService;
 
@@ -20,7 +21,7 @@ public class ComplaintAPIController {
     }
 
     @PostMapping("/complaints/add")
-    public ResponseEntity<String> addComplaint(@RequestBody Complaint complaint) {
+    public ResponseEntity<String> addComplaint(@RequestBody Complaint complaint) throws CustomException {
         complaintService.addComplaint(complaint);
         return ResponseEntity.ok("Complaint added successfully");
     }
@@ -48,7 +49,7 @@ public class ComplaintAPIController {
     public ResponseEntity<String> deleteComplaint(
             @PathVariable Long complaintid,
             @RequestParam(value = "complaintReceiver", required = false) String complaintReceiver,
-            @RequestParam(value = "complaintCreator", required = false) String complaintCreator) {
+            @RequestParam(value = "complaintCreator", required = false) String complaintCreator) throws CustomException {
 
         if (complaintid!=null){
             complaintService.deleteComplaintById(complaintid);
@@ -65,7 +66,7 @@ public class ComplaintAPIController {
 
 
     @GetMapping("/complaints/getById/{complaintid}")
-    public ResponseEntity<Complaint> getComplaint( @PathVariable Long complaintid) {
+    public ResponseEntity<Complaint> getComplaint( @PathVariable Long complaintid) throws CustomException {
         Complaint complaint = complaintService.getComplaintById(complaintid);
         return ResponseEntity.ok(complaint);
     }
@@ -78,7 +79,7 @@ public class ComplaintAPIController {
             @RequestParam(name = "complaintReceiver", required = false) Optional<String> optionalComplaintReceiver,
             @RequestParam(name = "complaintCreator", required = false) Optional<String> optionalComplaintCreator,
             @RequestParam(name = "complaintText", required = false) Optional<String> optionalComplaintText
-    ) {
+    ) throws CustomException {
         Complaint existingComplaint = complaintService.getComplaintById(complaintid);
         if (existingComplaint == null) {
             return ResponseEntity.notFound().build();

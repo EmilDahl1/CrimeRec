@@ -13,4 +13,8 @@ public interface ComplaintRepository extends CrudRepository<Complaint, Long> {
 
     // Delete by complaintCreator (query by method name)
     List<Complaint> deleteByComplaintCreator(String complaintCreator);
+
+    boolean existsByComplaintReceiver(String complaintReceiver);
+
+    boolean existsByComplaintCreator(String complaintCreator);
 }
